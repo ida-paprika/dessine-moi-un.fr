@@ -1,10 +1,13 @@
 package co.simplon.p25.dessinemoiun.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +21,6 @@ import co.simplon.p25.dessinemoiun.services.ProjectService;
 
 @RestController
 @RequestMapping("projects")
-@CrossOrigin(origins = "http://localhost:4200")
 public class ProjectController {
 
     private final ProjectService service;
@@ -33,24 +35,34 @@ public class ProjectController {
 	return service.getEstimatedPrice(mediumId, formatId);
     }
 
-    // TODO endpoint to create a new project
     @PostMapping
     public void createProject(@Valid @RequestBody ProjectCreate inputs) {
-	// get logged user id
+	// TODO get logged user id
+//	String uuid = SecurityHelper.authenticatedProfileUuid();
+//	System.out.println("UUID : " + uuid);
 	service.create(inputs);
     }
 
-    // TODO endpoint to get all projects of the logged user
-    @GetMapping
-    public ProjectView getAllProjects() {
-	Long profileId = (long) 1; // SecurityHelper.profileId();
-	return service.getAllProjects(profileId);
+    @GetMapping("/artist")
+    public List<ProjectView> getArtistProjects(
+	    @RequestParam(name = "profileId") Long profileId) {
+	return service.getArtistProjects(profileId);
     }
 
-    // TODO endpoint to update the actual project
+    @GetMapping("/orderer")
+    public List<ProjectView> getOrdererProjects(
+	    @RequestParam(name = "profileId") Long profileId) {
+	return service.getOrdererProjects(profileId);
+    }
+
     @PatchMapping
     public void updateProject(@Valid @RequestBody ProjectUpdate inputs) {
 	service.updateProject(inputs);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteProject(@PathVariable("id") Long projectId) {
+	service.deleteProject(projectId);
     }
 
 }

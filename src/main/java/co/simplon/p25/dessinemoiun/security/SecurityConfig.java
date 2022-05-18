@@ -23,17 +23,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 	http.cors().and().csrf().disable().logout().disable()
-		//
 		.sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 		// ANONYMOUS authorizations
 		.authorizeRequests()
 		.antMatchers(HttpMethod.POST, "/profiles/create-orderer",
-			"/profiles/create-artist", "/profiles/login")
+			"/profiles/create-artist", "/profiles/login",
+			"/projects")
 		.permitAll().and().authorizeRequests()
 		.antMatchers(HttpMethod.GET, "/artmediums", "/artformats",
-			"/projects/price")
-		.permitAll()
+			"/projects/price", "/artists/cards",
+			"/projects/orderer")
+		.permitAll().and().authorizeRequests()
+		.antMatchers(HttpMethod.DELETE, "/projects/*").permitAll()
 //		.and().authorizeRequests()
 //		.antMatchers(HttpMethod.GET, "/artworks/create").permitAll()
 //		// ARTIST authorizations ("/artists/**" =ok= "/artists" ?)

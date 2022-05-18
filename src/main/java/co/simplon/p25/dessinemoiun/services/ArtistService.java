@@ -6,6 +6,6 @@ import co.simplon.p25.dessinemoiun.dtos.ArtistCard;
 
 public interface ArtistService {
 
-    List<ArtistCard> getArtistCard();
+    List<ArtistCard> getArtistCardByTools(Long mediumId, Long formatId);
 
 }

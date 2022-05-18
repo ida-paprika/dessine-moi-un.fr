@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
@@ -14,21 +14,21 @@ public class ProjectCreate {
     @Size(min = 20, max = 255)
     private String description;
 
-    @NotBlank
+    @NotNull
     @Positive
     private Integer price;
 
-    @NotBlank
+    @NotNull
     @Future
     private LocalDate deadline;
 
-    @NotEmpty
+    @NotNull
     private Long artMediumId;
 
-    @NotEmpty
+    @NotNull
     private Long artFormatId;
 
-    @NotEmpty
+    @NotNull
     private Long artistId;
 
     public ProjectCreate() {
@@ -81,6 +81,14 @@ public class ProjectCreate {
 
     public void setArtistId(Long artistId) {
 	this.artistId = artistId;
+    }
+
+    @Override
+    public String toString() {
+	return String.format(
+		"ProjectCreate [description=%s, price=%s, deadline=%s, artMediumId=%s, artFormatId=%s, artistId=%s]",
+		description, price, deadline, artMediumId, artFormatId,
+		artistId);
     }
 
 }

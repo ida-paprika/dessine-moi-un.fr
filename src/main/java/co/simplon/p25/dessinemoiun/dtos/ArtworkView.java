@@ -10,6 +10,11 @@ public class ArtworkView {
 	//
     }
 
+    public ArtworkView(String fileName, Boolean cover) {
+	this.fileName = fileName;
+	this.cover = cover;
+    }
+
     public String getFileName() {
 	return fileName;
     }

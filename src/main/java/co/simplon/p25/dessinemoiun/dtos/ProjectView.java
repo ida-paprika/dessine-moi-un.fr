@@ -8,7 +8,7 @@ public class ProjectView {
 
     private String description;
 
-    private Integer price;
+    private double price;
 
     private LocalDate deadline;
 
@@ -22,6 +22,19 @@ public class ProjectView {
 
     public ProjectView() {
 	//
+    }
+
+    public ProjectView(Long id, String description, double price,
+	    LocalDate deadline, String artMediumLabel, String artFormatLabel,
+	    String userName, String progressStatus) {
+	this.id = id;
+	this.description = description;
+	this.price = price;
+	this.deadline = deadline;
+	this.artMediumLabel = artMediumLabel;
+	this.artFormatLabel = artFormatLabel;
+	this.userName = userName;
+	this.progressStatus = progressStatus;
     }
 
     public Long getId() {
@@ -40,11 +53,11 @@ public class ProjectView {
 	this.description = description;
     }
 
-    public Integer getPrice() {
+    public double getPrice() {
 	return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(double price) {
 	this.price = price;
     }
 

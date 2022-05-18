@@ -17,8 +17,8 @@ public class ArtFormat extends AbstractEntity {
     @Column(name = "minimum_price")
     private Integer minimumPrice;
 
-    @Column(name = "scale")
-    private double scale;
+    @Column(name = "multiplier")
+    private double multiplier;
 
     @ManyToMany(mappedBy = "artFormat")
     private List<Artist> artist;
@@ -43,12 +43,12 @@ public class ArtFormat extends AbstractEntity {
 	this.minimumPrice = minimumPrice;
     }
 
-    public double getScale() {
-	return scale;
+    public double getMultiplier() {
+	return multiplier;
     }
 
-    public void setScale(double scale) {
-	this.scale = scale;
+    public void setMultiplier(double multiplier) {
+	this.multiplier = multiplier;
     }
 
     public List<Artist> getArtist() {
@@ -57,6 +57,13 @@ public class ArtFormat extends AbstractEntity {
 
     public void setArtist(List<Artist> artist) {
 	this.artist = artist;
+    }
+
+    @Override
+    public String toString() {
+	return String.format(
+		"ArtFormat [label=%s, minimumPrice=%s, multiplier=%s]", label,
+		minimumPrice, multiplier);
     }
 
 }

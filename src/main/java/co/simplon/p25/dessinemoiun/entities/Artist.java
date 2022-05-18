@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -24,6 +25,10 @@ public class Artist extends AbstractEntity {
     @Column(name = "available")
     private Boolean available;
 
+    @OneToOne
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
+
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "artists_art_mediums", joinColumns = @JoinColumn(name = "artist_id"), inverseJoinColumns = @JoinColumn(name = "art_medium_id"))
     private List<ArtMedium> artMedium;
@@ -33,15 +38,16 @@ public class Artist extends AbstractEntity {
     private List<ArtFormat> artFormat;
 
     @OneToMany(mappedBy = "artist")
-    private List<Artwork> gallery;
+    private List<Artwork> artwork;
 
     public Artist() {
 	//
     }
 
-    public Artist(String artistName, Boolean available) {
+    public Artist(String artistName, Boolean available, Profile profile) {
 	this.artistName = artistName;
 	this.available = available;
+	this.profile = profile;
     }
 
     public String getArtistName() {
@@ -68,6 +74,14 @@ public class Artist extends AbstractEntity {
 	this.available = available;
     }
 
+    public Profile getProfile() {
+	return profile;
+    }
+
+    public void setProfile(Profile profile) {
+	this.profile = profile;
+    }
+
     public List<ArtMedium> getArtMedium() {
 	return artMedium;
     }
@@ -82,6 +96,22 @@ public class Artist extends AbstractEntity {
 
     public void setArtFormat(List<ArtFormat> artFormat) {
 	this.artFormat = artFormat;
+    }
+
+    public List<Artwork> getArtwork() {
+	return artwork;
+    }
+
+    public void setArtwork(List<Artwork> artwork) {
+	this.artwork = artwork;
+    }
+
+    @Override
+    public String toString() {
+	return String.format(
+		"Artist [artistName=%s, instagramUrl=%s, available=%s, profile=%s, artMedium=%s]",
+		artistName, instagramUrl, available, profile,
+		artMedium.toString());
     }
 
 }

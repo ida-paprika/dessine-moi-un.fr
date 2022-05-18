@@ -3,8 +3,11 @@ package co.simplon.p25.dessinemoiun.dtos;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import co.simplon.p25.dessinemoiun.validation.UniqueEmail;
+
 public class ProfileCreate {
 
+    @UniqueEmail
     @NotBlank
     @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")
     private String email;
@@ -19,13 +22,9 @@ public class ProfileCreate {
 	//
     }
 
-    public ProfileCreate(
-	    @NotBlank @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$") String email,
-	    @NotBlank @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$") String password,
-	    String role) {
+    public ProfileCreate(String email, String password) {
 	this.email = email;
 	this.password = password;
-	this.role = role;
     }
 
     public String getEmail() {

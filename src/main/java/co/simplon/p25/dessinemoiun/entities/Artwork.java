@@ -7,7 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "galleries")
+@Table(name = "artworks")
 public class Artwork extends AbstractEntity {
 
     @Column(name = "file_name")
@@ -46,6 +46,18 @@ public class Artwork extends AbstractEntity {
 
     public void setArtist(Artist artist) {
 	this.artist = artist;
+    }
+
+    public Artwork(String fileName, Boolean cover, Artist artist) {
+	this.fileName = fileName;
+	this.cover = cover;
+	this.artist = artist;
+    }
+
+    @Override
+    public String toString() {
+	return String.format("Artwork [fileName=%s, cover=%s, artist=%s]",
+		fileName, cover, artist.toString());
     }
 
 }

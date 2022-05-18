@@ -6,7 +6,7 @@ public class ArtistCard {
 
     private String artistName;
 
-    private ArtworkView artwork;
+    private String artwork;
 
     public ArtistCard() {
 	//
@@ -28,12 +28,18 @@ public class ArtistCard {
 	this.artistName = artistName;
     }
 
-    public ArtworkView getArtwork() {
+    public String getArtwork() {
 	return artwork;
     }
 
-    public void setArtwork(ArtworkView artwork) {
+    public void setArtwork(String artwork) {
 	this.artwork = artwork;
+    }
+
+    @Override
+    public String toString() {
+	return String.format("ArtistCard [id=%s, artistName=%s, artwork=%s]",
+		id, artistName, artwork);
     }
 
 }

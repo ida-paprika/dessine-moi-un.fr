@@ -25,7 +25,7 @@ import co.simplon.p25.dessinemoiun.security.Jwt;
 @Service
 public class ProfileServiceImpl implements ProfileService {
 
-    @Value("gandalf.api.access.url")
+    @Value("gandalf.api.root-uri")
     private String gandalfUrl;
 
     @Value("${dessinemoiun.api-value.client-name.header}")
@@ -38,38 +38,44 @@ public class ProfileServiceImpl implements ProfileService {
 
     private final ArtistRepository artistRepo;
 
-    private final RestTemplate restTemplate;
+    private final RestTemplate gandalf;
 
     public ProfileServiceImpl(ProfileRepository profileRepo,
-	    RestTemplate restTemplate, ArtistRepository artistRepo) {
+	    RestTemplate gandalfRestTemplate, ArtistRepository artistRepo) {
 	this.profileRepo = profileRepo;
 	this.artistRepo = artistRepo;
-	this.restTemplate = restTemplate;
+	this.gandalf = gandalfRestTemplate;
     }
 
     @Override
-    public void createOrderer(@Valid ProfileCreate userInput) {
-	userInput.setRole("ROLE_ORDERER");
+    public void createOrderer(@Valid ProfileCreate userInputs) {
+	userInputs.setRole("ROLE_ORDERER");
 
-	HttpHeaders headers = setHeaders();
-	HttpEntity<ProfileCreate> entity = new HttpEntity<ProfileCreate>(
-		userInput, headers);
+//	gandalf.postForLocation("users/create", userInput);
 
-	String resourceUrl = "http://localhost:9090/users/create";
+//	HttpHeaders headers = setHeaders();
+//	HttpEntity<ProfileCreate> entity = new HttpEntity<ProfileCreate>(
+//		userInput, headers);
+//
+//	String resourceUrl = "http://localhost:9090/users/create";
+//
+//	ResponseEntity<UUID> response = gandalf.postForEntity(resourceUrl,
+//		entity, UUID.class);
 
-	ResponseEntity<UUID> response = restTemplate.postForEntity(resourceUrl,
-		entity, UUID.class);
+	ResponseEntity<UUID> response = gandalf.postForEntity("/users/create",
+		userInputs, UUID.class);
 
 	UUID uuid = response.getBody();
 
-	Profile newProfile = new Profile(uuid, userInput.getEmail());
+	Profile newProfile = new Profile(uuid, userInputs.getEmail());
 	profileRepo.save(newProfile);
     }
 
     @Override
-    public void createArtist(@Valid ArtistCreate userInput) {
-	ProfileCreate profile = new ProfileCreate(userInput.getEmail(),
-		userInput.getPassword(), "ROLE_ARTIST");
+    public void createArtist(@Valid ArtistCreate userInputs) {
+	ProfileCreate profile = new ProfileCreate(userInputs.getEmail(),
+		userInputs.getPassword());
+	profile.setRole("ROLE_ARTIST");
 
 	HttpHeaders headers = setHeaders();
 	HttpEntity<ProfileCreate> entity = new HttpEntity<ProfileCreate>(
@@ -77,46 +83,47 @@ public class ProfileServiceImpl implements ProfileService {
 
 	String resourceUrl = "http://localhost:9090/users/create";
 
-	ResponseEntity<UUID> response = restTemplate.postForEntity(resourceUrl,
+	ResponseEntity<UUID> response = gandalf.postForEntity(resourceUrl,
 		entity, UUID.class);
 
 	UUID uuid = response.getBody();
 
-	Profile newProfile = new Profile(uuid, userInput.getEmail());
+	Profile newProfile = new Profile(uuid, userInputs.getEmail());
 	profileRepo.save(newProfile);
 
-	Artist newArtist = new Artist(userInput.getArtistName(), false);
+	Artist newArtist = new Artist(userInputs.getArtistName(), false,
+		newProfile);
 	artistRepo.save(newArtist);
 
     }
 
     @Override
-    public Jwt login(ProfileLogin userInput) throws BadCredentialsException {
+    public Jwt login(ProfileLogin userInputs) throws BadCredentialsException {
 
 	Profile profile = profileRepo
-		.findByEmailIgnoreCase(userInput.getEmail()).orElseThrow(
+		.findByEmailIgnoreCase(userInputs.getEmail()).orElseThrow(
 			() -> new BadCredentialsException("Profile not found"));
 
-	HttpHeaders headers = setHeaders();
+//	HttpHeaders headers = setHeaders();
+//
+//	HttpEntity<ProfileLogin> entity = new HttpEntity<ProfileLogin>(
+//		userInput, headers);
+//
+//	String resourceUrl = "http://localhost:9090/users/login";
+//
+//	ResponseEntity<GandalfJwt> response = gandalf.postForEntity(resourceUrl,
+//		entity, GandalfJwt.class);
 
-	HttpEntity<ProfileLogin> entity = new HttpEntity<ProfileLogin>(
-		userInput, headers);
-
-	String resourceUrl = "http://localhost:9090/users/login";
-
-	ResponseEntity<GandalfJwt> response = restTemplate
-		.postForEntity(resourceUrl, entity, GandalfJwt.class);
+	ResponseEntity<GandalfJwt> response = gandalf
+		.postForEntity("/users/login", userInputs, GandalfJwt.class);
 
 	GandalfJwt jwt = response.getBody();
 
-	UUID uuid = jwt.getUuid();
-	System.out.println(jwt.getUuid());
+//	UUID uuid = jwt.getUuid();
 
 	Jwt token = new Jwt(jwt.getToken());
 
 	return token;
-
-	// récupérer UUID pour faire le lien avec Profile
 
     }
 
@@ -126,7 +133,5 @@ public class ProfileServiceImpl implements ProfileService {
 	headers.set("client-api-key", headerApiKey);
 	return headers;
     }
-
-    // TODO create method "newUser()"
 
 }

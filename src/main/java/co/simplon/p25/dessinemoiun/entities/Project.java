@@ -20,7 +20,7 @@ public class Project extends AbstractEntity {
     private String description;
 
     @Column(name = "price")
-    private Integer price;
+    private double price;
 
     @Column(name = "deadline")
     private LocalDate deadline;
@@ -65,11 +65,11 @@ public class Project extends AbstractEntity {
 	this.description = description;
     }
 
-    public Integer getPrice() {
+    public double getPrice() {
 	return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(double price) {
 	this.price = price;
     }
 
@@ -119,6 +119,14 @@ public class Project extends AbstractEntity {
 
     public void setProgressStatus(ProgressStatus progressStatus) {
 	this.progressStatus = progressStatus;
+    }
+
+    @Override
+    public String toString() {
+	return String.format(
+		"Project [createdAt=%s, description=%s, price=%s, deadline=%s, artist=%s, profile=%s, artMedium=%s, artFormat=%s, progressStatus=%s]",
+		createdAt, description, price, deadline, artist, profile,
+		artMedium, artFormat, progressStatus);
     }
 
 }

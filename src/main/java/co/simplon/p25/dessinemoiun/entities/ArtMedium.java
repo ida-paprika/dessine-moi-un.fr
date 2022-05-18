@@ -48,4 +48,10 @@ public class ArtMedium extends AbstractEntity {
 	this.artist = artist;
     }
 
+    @Override
+    public String toString() {
+	return String.format("ArtMedium [label=%s, minimumPrice=%s, artist=%s]",
+		label, minimumPrice, artist.toString());
+    }
+
 }

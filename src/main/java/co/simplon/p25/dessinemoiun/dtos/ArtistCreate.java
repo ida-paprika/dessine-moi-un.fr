@@ -4,12 +4,17 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import co.simplon.p25.dessinemoiun.validation.UniqueArtistName;
+import co.simplon.p25.dessinemoiun.validation.UniqueEmail;
+
 public class ArtistCreate {
 
+    @UniqueArtistName
     @NotBlank
     @Size(min = 2, max = 50)
     private String artistName;
 
+    @UniqueEmail
     @NotBlank
     @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")
     private String email;
