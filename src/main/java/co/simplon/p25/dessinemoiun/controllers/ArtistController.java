@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.simplon.p25.dessinemoiun.dtos.ArtistCard;
-import co.simplon.p25.dessinemoiun.dtos.ArtistPublic;
-import co.simplon.p25.dessinemoiun.dtos.ArtistTop3;
+import co.simplon.p25.dessinemoiun.dtos.artist.ArtistCard;
+import co.simplon.p25.dessinemoiun.dtos.artist.ArtistPublic;
+import co.simplon.p25.dessinemoiun.dtos.artist.ArtistTop3;
 import co.simplon.p25.dessinemoiun.services.ArtistService;
 
 @RestController

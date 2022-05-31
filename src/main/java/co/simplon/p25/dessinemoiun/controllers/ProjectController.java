@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.simplon.p25.dessinemoiun.dtos.ProjectCreate;
-import co.simplon.p25.dessinemoiun.dtos.ProjectUpdate;
-import co.simplon.p25.dessinemoiun.dtos.ProjectView;
+import co.simplon.p25.dessinemoiun.dtos.project.ProjectCreate;
+import co.simplon.p25.dessinemoiun.dtos.project.ProjectUpdate;
+import co.simplon.p25.dessinemoiun.dtos.project.ProjectView;
 import co.simplon.p25.dessinemoiun.services.ProjectService;
 
 @RestController
@@ -44,15 +44,18 @@ public class ProjectController {
     }
 
     @GetMapping("/artist")
-    public List<ProjectView> getArtistProjects(
-	    @RequestParam(name = "profileId") Long profileId) {
-	return service.getArtistProjects(profileId);
+    public List<ProjectView> getArtistProjects() {
+	return service.getArtistProjects();
     }
 
+//    @GetMapping("/orderer")
+//    public List<ProjectView> getOrdererProjects(
+//	    @RequestParam(name = "profileId") Long profileId) {
+//	return service.getOrdererProjects(profileId);
+//    }
     @GetMapping("/orderer")
-    public List<ProjectView> getOrdererProjects(
-	    @RequestParam(name = "profileId") Long profileId) {
-	return service.getOrdererProjects(profileId);
+    public List<ProjectView> getOrdererProjects() {
+	return service.getOrdererProjects();
     }
 
     @PatchMapping

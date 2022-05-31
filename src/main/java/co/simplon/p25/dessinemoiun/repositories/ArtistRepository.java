@@ -18,7 +18,7 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
 //    @Query(value = "SELECT a.id FROM artists a WHERE a.profile_id = :profileId", nativeQuery = true)
 //    Artist findOneByProfileId(@Param("profileId") Long profileId);
 
-    Artist findOneByProfile(Optional<Profile> findById);
+    Artist findOneByProfile(Profile profile);
 
     Optional<Artist> findByArtistNameIgnoreCase(String artistName);
 

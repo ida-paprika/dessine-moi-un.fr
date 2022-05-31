@@ -7,7 +7,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import co.simplon.p25.dessinemoiun.dtos.ArtistCard;
+import co.simplon.p25.dessinemoiun.dtos.artist.ArtistCard;
 import co.simplon.p25.dessinemoiun.entities.ArtFormat;
 import co.simplon.p25.dessinemoiun.entities.ArtMedium;
 import co.simplon.p25.dessinemoiun.entities.Artist;

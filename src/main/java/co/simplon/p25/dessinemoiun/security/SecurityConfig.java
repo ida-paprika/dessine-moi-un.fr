@@ -13,6 +13,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -27,23 +29,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 		// ANONYMOUS authorizations
 		.authorizeRequests()
-		.antMatchers(HttpMethod.POST, "/profiles/create-orderer",
-			"/profiles/create-artist", "/profiles/login",
-			"/projects")
+		.antMatchers(HttpMethod.POST, "/auth/create-orderer",
+			"/auth/create-artist", "/auth/login")
+		.permitAll().and().authorizeRequests()
+		.antMatchers(HttpMethod.PATCH, "/auth/lost-password")
 		.permitAll().and().authorizeRequests()
 		.antMatchers(HttpMethod.GET, "/artmediums", "/artformats",
-			"/projects/price", "/artists/cards",
-			"/projects/orderer")
-		.permitAll().and().authorizeRequests()
-		.antMatchers(HttpMethod.DELETE, "/projects/*").permitAll()
+			"/projects/price", "/artists/cards")
+		.permitAll()
+//		.and().authorizeRequests()
+//		.antMatchers(HttpMethod.DELETE, "/projects/*").permitAll()
 //		.and().authorizeRequests()
 //		.antMatchers(HttpMethod.GET, "/artworks/create").permitAll()
-//		// ARTIST authorizations ("/artists/**" =ok= "/artists" ?)
+//		// ARTIST authorizations
 //		.and().authorizeRequests().antMatchers("/artists/**")
 //		.hasRole("ARTIST")
 //		// ORDERER authorizations
-//		.and().authorizeRequests().antMatchers("").hasRole("ORDERER")
-		// LOGGED authorizations
+		.and().authorizeRequests()
+		.antMatchers(HttpMethod.GET, "/projects/orderer",
+			"/profiles/name")
+		.hasRole("ORDERER").and().authorizeRequests()
+		.antMatchers(HttpMethod.POST, "/projects").hasRole("ORDERER")
+		.and().authorizeRequests()
+		.antMatchers(HttpMethod.PATCH, "/profiles/update-names")
+		.hasRole("ORDERER").and().authorizeRequests()
+		.antMatchers(HttpMethod.DELETE, "/projects/{id}")
+		.hasRole("ORDERER")
+		//
 		.and().authorizeRequests().anyRequest().authenticated().and()
 		.oauth2ResourceServer().jwt();
 
@@ -56,4 +68,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	return NimbusJwtDecoder.withSecretKey(secretKey)
 		.macAlgorithm(MacAlgorithm.HS256).build();
     }
+
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+	JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+	authoritiesConverter.setAuthoritiesClaimName("roles");
+	authoritiesConverter.setAuthorityPrefix("");
+	JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();
+	authenticationConverter
+		.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+	return authenticationConverter;
+    }
+
 }
