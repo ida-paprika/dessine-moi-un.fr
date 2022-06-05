@@ -16,6 +16,12 @@ public class Profile extends AbstractEntity {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
     public Profile() {
 	//
     }
@@ -41,9 +47,27 @@ public class Profile extends AbstractEntity {
 	this.email = email;
     }
 
+    public String getFirstName() {
+	return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+	this.firstName = firstName;
+    }
+
+    public String getLastName() {
+	return lastName;
+    }
+
+    public void setLastName(String lastName) {
+	this.lastName = lastName;
+    }
+
     @Override
     public String toString() {
-	return String.format("Profile [uuid=%s, email=%s]", uuid, email);
+	return String.format(
+		"Profile [uuid=[PROTECTED], email=%s, firstName=%s, lastName=%s]",
+		email, firstName, lastName);
     }
 
 }

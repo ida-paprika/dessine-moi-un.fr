@@ -2,17 +2,13 @@ package co.simplon.p25.dessinemoiun.services;
 
 import javax.validation.Valid;
 
-import co.simplon.p25.dessinemoiun.dtos.ArtistCreate;
-import co.simplon.p25.dessinemoiun.dtos.ProfileCreate;
-import co.simplon.p25.dessinemoiun.dtos.ProfileLogin;
-import co.simplon.p25.dessinemoiun.security.Jwt;
+import co.simplon.p25.dessinemoiun.dtos.profile.ProfileNamesUpdate;
+import co.simplon.p25.dessinemoiun.dtos.profile.ProfileNamesView;
 
 public interface ProfileService {
 
-    Jwt login(ProfileLogin userInput);
+    ProfileNamesView updateProfileNames(@Valid ProfileNamesUpdate userInputs);
 
-    void createArtist(@Valid ArtistCreate userInput);
-
-    void createOrderer(@Valid ProfileCreate userInput);
+    ProfileNamesView getProfileNames();
 
 }

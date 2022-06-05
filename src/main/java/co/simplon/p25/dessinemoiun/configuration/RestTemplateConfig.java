@@ -25,19 +25,36 @@ public class RestTemplateConfig {
     @Value("${dessinemoiun.api-value.credentials.header}")
     private String headerApiKey;
 
+    @Value("${herald.api.root-uri}")
+    private String heraldRootUri;
+
+    @Value("${herald.api.client-name}")
+    private String heraldClientName;
+
+    @Value("${herald.api.client-key}")
+    private String heraldClientKey;
+
     private final ObjectMapper objectMapper;
 
-    // Default ObjectMapper (Jackson) injected by Spring
     public RestTemplateConfig(ObjectMapper objectMapper) {
 	this.objectMapper = objectMapper;
     }
 
-    // Default RestTemplateBuilder injected by Spring
     @Bean
     public RestTemplate gandalfRestTemplate(RestTemplateBuilder builder) {
 	RestTemplate template = builder.rootUri(gandalfUri)
 		.defaultHeader("client-name", headerName)
 		.defaultHeader("client-api-key", headerApiKey)
+		.errorHandler(errorHandler()).build();
+	template.setRequestFactory(requestFactory());
+	return template;
+    }
+
+    @Bean
+    public RestTemplate heraldRestTemplate(RestTemplateBuilder builder) {
+	RestTemplate template = builder.rootUri(heraldRootUri)
+		.defaultHeader("API-Client-Name", heraldClientName)
+		.defaultHeader("API-Key", heraldClientKey)
 		.errorHandler(errorHandler()).build();
 	template.setRequestFactory(requestFactory());
 	return template;

@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -36,9 +35,6 @@ public class Artist extends AbstractEntity {
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "artists_art_formats", joinColumns = @JoinColumn(name = "artist_id"), inverseJoinColumns = @JoinColumn(name = "art_format_id"))
     private List<ArtFormat> artFormat;
-
-    @OneToMany(mappedBy = "artist")
-    private List<Artwork> artwork;
 
     public Artist() {
 	//
@@ -98,20 +94,11 @@ public class Artist extends AbstractEntity {
 	this.artFormat = artFormat;
     }
 
-    public List<Artwork> getArtwork() {
-	return artwork;
-    }
-
-    public void setArtwork(List<Artwork> artwork) {
-	this.artwork = artwork;
-    }
-
     @Override
     public String toString() {
 	return String.format(
-		"Artist [artistName=%s, instagramUrl=%s, available=%s, profile=%s, artMedium=%s]",
-		artistName, instagramUrl, available, profile,
-		artMedium.toString());
+		"Artist [artistName=%s, instagramUrl=%s, available=%s, profile=%s]",
+		artistName, instagramUrl, available, profile);
     }
 
 }

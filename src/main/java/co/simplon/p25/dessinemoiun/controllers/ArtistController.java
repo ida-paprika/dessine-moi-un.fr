@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.simplon.p25.dessinemoiun.dtos.ArtistCard;
-import co.simplon.p25.dessinemoiun.dtos.ArtistPublic;
-import co.simplon.p25.dessinemoiun.dtos.ArtistTop3;
+import co.simplon.p25.dessinemoiun.dtos.artist.ArtistCard;
+import co.simplon.p25.dessinemoiun.dtos.artist.ArtistProfile;
+import co.simplon.p25.dessinemoiun.dtos.artist.ArtistTop3;
 import co.simplon.p25.dessinemoiun.services.ArtistService;
 
 @RestController
@@ -23,6 +23,10 @@ public class ArtistController {
     }
 
     // endpoint to get all actual artist's infos
+    @GetMapping("/profile")
+    public ArtistProfile getArtistProfile() {
+	return service.getArtistProfile();
+    }
 
     // endpoint to get ArtistCard
     @GetMapping("/cards")
@@ -32,15 +36,8 @@ public class ArtistController {
 	return service.getArtistCardByTools(mediumId, formatId);
     }
 
-    // endpoint to artist's public profile
-    public ArtistPublic getArtistPublic() {
-
-	return null;
-    }
-
     // endpoint to get the 3 "artists of the month"
     public List<ArtistTop3> getArtistsOfTheMonth() {
-
 	return null;
     }
 

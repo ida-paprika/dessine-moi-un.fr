@@ -19,4 +19,10 @@ public abstract class AbstractEntity {
     public Long getId() {
 	return id;
     }
+
+    // DO NOT SET : auto-incremented value
+    @SuppressWarnings("unused")
+    private void setId(Long id) {
+	this.id = id;
+    }
 }
