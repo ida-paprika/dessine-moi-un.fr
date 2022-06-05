@@ -8,6 +8,6 @@ import co.simplon.p25.dessinemoiun.entities.ArtFormat;
 
 public interface ArtFormatRepository extends JpaRepository<ArtFormat, Long> {
 
-    List<ArtFormat> findAllByOrderByLabelAsc();
+    <T> List<T> findAllProjectedByOrderByLabel(Class<T> type);
 
 }

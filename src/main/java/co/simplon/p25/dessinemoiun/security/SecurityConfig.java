@@ -35,15 +35,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers(HttpMethod.PATCH, "/auth/lost-password")
 		.permitAll().and().authorizeRequests()
 		.antMatchers(HttpMethod.GET, "/artmediums", "/artformats",
-			"/projects/price", "/artists/cards")
+			"/projects/price", "/artists/cards", "/artists/profile")
 		.permitAll()
-//		.and().authorizeRequests()
-//		.antMatchers(HttpMethod.DELETE, "/projects/*").permitAll()
-//		.and().authorizeRequests()
-//		.antMatchers(HttpMethod.GET, "/artworks/create").permitAll()
-//		// ARTIST authorizations
-//		.and().authorizeRequests().antMatchers("/artists/**")
-//		.hasRole("ARTIST")
+		// ARTIST authorizations
+		.and().authorizeRequests()
+		.antMatchers(HttpMethod.GET, "/projects/artist")
+		.hasRole("ARTIST")
 //		// ORDERER authorizations
 		.and().authorizeRequests()
 		.antMatchers(HttpMethod.GET, "/projects/orderer",
@@ -51,10 +48,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.hasRole("ORDERER").and().authorizeRequests()
 		.antMatchers(HttpMethod.POST, "/projects").hasRole("ORDERER")
 		.and().authorizeRequests()
-		.antMatchers(HttpMethod.PATCH, "/profiles/update-names")
-		.hasRole("ORDERER").and().authorizeRequests()
 		.antMatchers(HttpMethod.DELETE, "/projects/{id}")
 		.hasRole("ORDERER")
+		// ORDERER or ARTIST authorizations
+		.and().authorizeRequests()
+		.antMatchers(HttpMethod.PATCH, "/auth/reset-password",
+			"/profiles/update-names")
+		.hasAnyRole("ORDERER", "ARTIST")
 		//
 		.and().authorizeRequests().anyRequest().authenticated().and()
 		.oauth2ResourceServer().jwt();

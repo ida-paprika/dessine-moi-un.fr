@@ -8,6 +8,6 @@ import co.simplon.p25.dessinemoiun.entities.ArtMedium;
 
 public interface ArtMediumRepository extends JpaRepository<ArtMedium, Long> {
 
-    List<ArtMedium> findAllByOrderByLabelAsc();
+    <T> List<T> findAllProjectedByOrderByLabel(Class<T> type);
 
 }

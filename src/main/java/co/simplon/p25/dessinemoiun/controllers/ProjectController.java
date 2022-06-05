@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.simplon.p25.dessinemoiun.dtos.project.ProjectCreate;
@@ -36,6 +38,7 @@ public class ProjectController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public void createProject(@Valid @RequestBody ProjectCreate inputs) {
 	// TODO get logged user id
 //	String uuid = SecurityHelper.authenticatedProfileUuid();
@@ -48,14 +51,14 @@ public class ProjectController {
 	return service.getArtistProjects();
     }
 
-//    @GetMapping("/orderer")
-//    public List<ProjectView> getOrdererProjects(
-//	    @RequestParam(name = "profileId") Long profileId) {
-//	return service.getOrdererProjects(profileId);
-//    }
     @GetMapping("/orderer")
     public List<ProjectView> getOrdererProjects() {
 	return service.getOrdererProjects();
+    }
+
+    @PatchMapping("/accept")
+    public void acceptProject(@RequestBody Long projectId) {
+	service.acceptProject(projectId);
     }
 
     @PatchMapping

@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
@@ -17,24 +16,26 @@ import co.simplon.p25.dessinemoiun.dtos.profile.ProfileCreate;
 import co.simplon.p25.dessinemoiun.dtos.profile.ProfileEmail;
 import co.simplon.p25.dessinemoiun.dtos.profile.ProfileLogin;
 import co.simplon.p25.dessinemoiun.dtos.profile.ProfileUuid;
+import co.simplon.p25.dessinemoiun.dtos.profile.ResetPassword;
 import co.simplon.p25.dessinemoiun.entities.Artist;
 import co.simplon.p25.dessinemoiun.entities.Profile;
 import co.simplon.p25.dessinemoiun.repositories.ArtistRepository;
 import co.simplon.p25.dessinemoiun.repositories.ProfileRepository;
 import co.simplon.p25.dessinemoiun.security.GandalfJwt;
 import co.simplon.p25.dessinemoiun.security.Jwt;
+import co.simplon.p25.dessinemoiun.security.SecurityHelper;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    @Value("gandalf.api.root-uri")
-    private String gandalfUrl;
-
-    @Value("${dessinemoiun.api-value.client-name.header}")
-    private String headerName;
-
-    @Value("${dessinemoiun.api-value.credentials.header}")
-    private String headerApiKey;
+//    @Value("gandalf.api.root-uri")
+//    private String gandalfUrl;
+//
+//    @Value("${dessinemoiun.api-value.client-name.header}")
+//    private String headerName;
+//
+//    @Value("${dessinemoiun.api-value.credentials.header}")
+//    private String headerApiKey;
 
     private final ProfileRepository profileRepo;
 
@@ -43,10 +44,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final RestTemplate gandalf;
 
     public AuthenticationServiceImpl(ProfileRepository profileRepo,
-	    ArtistRepository artistRepo, RestTemplate gandalf) {
+	    ArtistRepository artistRepo, RestTemplate gandalfRestTemplate) {
 	this.profileRepo = profileRepo;
 	this.artistRepo = artistRepo;
-	this.gandalf = gandalf;
+	this.gandalf = gandalfRestTemplate;
     }
 
     @Transactional
@@ -65,9 +66,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 	profile.setRole("ROLE_ARTIST");
 
-	this.createOrderer(profile);
-
 	Profile newProfile = this.createGandalfUser(profile);
+	profileRepo.save(newProfile);
 
 	Artist newArtist = new Artist(userInputs.getArtistName(), false,
 		newProfile);
@@ -95,6 +95,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	Profile profile = profileRepo.findByEmailIgnoreCase(email.getEmail())
 		.orElseThrow(() -> new BadCredentialsException("Unknown user"));
 	LostPassword lostPwd = new LostPassword();
+
 	lostPwd.setUserUuid(profile.getUuid());
 	lostPwd.setMailHeader("<h3>Bonjour</h3>");
 	lostPwd.setMailFooter(
@@ -102,6 +103,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 	gandalf.patchForObject("/users/lost-password", lostPwd, String.class);
 
+    }
+
+    @Override
+    public void resetPassword(@Valid ResetPassword inputs) {
+	UUID tokenUuid = UUID
+		.fromString(SecurityHelper.authenticatedProfileUuid());
+	inputs.setUserUuid(tokenUuid);
+
+	gandalf.patchForObject("/users/reset-password", inputs, String.class);
     }
 
     private Profile createGandalfUser(ProfileCreate profileDto) {

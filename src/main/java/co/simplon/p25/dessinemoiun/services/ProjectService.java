@@ -22,4 +22,6 @@ public interface ProjectService {
 
     void deleteProject(Long projectId);
 
+    void acceptProject(Long projectId);
+
 }

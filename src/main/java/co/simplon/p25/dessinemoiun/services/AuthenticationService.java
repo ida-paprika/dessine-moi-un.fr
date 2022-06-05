@@ -6,6 +6,7 @@ import co.simplon.p25.dessinemoiun.dtos.artist.ArtistCreate;
 import co.simplon.p25.dessinemoiun.dtos.profile.ProfileCreate;
 import co.simplon.p25.dessinemoiun.dtos.profile.ProfileEmail;
 import co.simplon.p25.dessinemoiun.dtos.profile.ProfileLogin;
+import co.simplon.p25.dessinemoiun.dtos.profile.ResetPassword;
 import co.simplon.p25.dessinemoiun.security.Jwt;
 
 public interface AuthenticationService {
@@ -17,5 +18,7 @@ public interface AuthenticationService {
     Jwt login(ProfileLogin userInputs);
 
     void lostPassword(@Valid ProfileEmail email);
+
+    void resetPassword(@Valid ResetPassword inputs);
 
 }

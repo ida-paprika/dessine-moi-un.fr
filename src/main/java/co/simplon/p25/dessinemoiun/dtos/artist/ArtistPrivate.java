@@ -7,7 +7,7 @@ public class ArtistPrivate {
     private String instagramUrl;
 
     public ArtistPrivate() {
-	// TODO Auto-generated constructor stub
+	//
     }
 
     public String getArtistName() {
